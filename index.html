@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia da Viagem Rio–Montreal–NY–Miami</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: cabeçalho fixo com abas; cada aba é um painel de cartões em grade. Tema: tinta azul-petróleo com sinal âmbar para alertas. */
+:root{
+  --bg:#f3f6f8; --surface:#ffffff; --ink:#13232e; --muted:#566a77; --line:#d8e0e6;
+  --accent:#0a6a86; --accent-soft:#dff0f5; --warn:#a9540f; --warn-soft:#fbeadb; --good:#1b7a4b; --good-soft:#dff3e8; --bad:#a3302c; --bad-soft:#f9e1df;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif; --body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1a22; --surface:#15262f; --ink:#e6eff4; --muted:#93a9b6; --line:#27404d;
+    --accent:#5cc3df; --accent-soft:#143743; --warn:#f0a35f; --warn-soft:#3a2716; --good:#5fd197; --good-soft:#143326; --bad:#f08a85; --bad-soft:#3b1d1c; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1a22; --surface:#15262f; --ink:#e6eff4; --muted:#93a9b6; --line:#27404d;
+  --accent:#5cc3df; --accent-soft:#143743; --warn:#f0a35f; --warn-soft:#3a2716; --good:#5fd197; --good-soft:#143326; --bad:#f08a85; --bad-soft:#3b1d1c; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--body);}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700}
+h2{font-size:1.45rem;font-weight:700;margin-bottom:.25rem}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:.4rem 0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:22px 0 0}
+.sub{color:var(--muted);margin-top:6px;max-width:68ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 16px}
+.chip{font:500 .8rem var(--body);padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--line)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin}
+nav.tabs a{flex:0 0 auto;text-decoration:none;color:var(--muted);font-weight:600;padding:12px 16px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent)}
+main{padding:24px 0 56px}
+.panel{display:none}
+.panel.on{display:block}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card.flat{background:transparent}
+.lead{color:var(--muted);margin:0 0 18px;max-width:70ch}
+.big{font:700 clamp(1.8rem,5vw,2.6rem)/1.1 var(--display);font-variant-numeric:tabular-nums}
+.label{font:600 .72rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font:600 .75rem var(--body);padding:2px 9px;border-radius:999px}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.info{background:var(--accent-soft);color:var(--accent)}
+/* itinerary */
+.route{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.route li{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:0 0 18px;position:relative}
+.route li:last-child{padding-bottom:0}
+.route .when{font:500 .85rem var(--mono);color:var(--muted);text-align:right;padding-top:2px}
+.route .what{border-left:3px solid var(--accent);padding:0 0 0 16px;position:relative}
+.route .what::before{content:"";position:absolute;left:-8px;top:5px;width:13px;height:13px;border-radius:50%;background:var(--surface);border:3px solid var(--accent)}
+.route .what b{font-family:var(--display);font-size:1.05rem}
+.route .what small{display:block;color:var(--muted)}
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:.95rem}
+th{font:600 .74rem var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+/* leg card */
+.leg{display:grid;gap:10px}
+.leg header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.times{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.times .t{font:700 1.5rem var(--display);font-variant-numeric:tabular-nums}
+.times .bar{flex:1;min-width:60px;height:2px;background:var(--line);position:relative}
+.times .bar i{position:absolute;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--warn)}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:.93rem}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{margin:0}
+.note{border-left:4px solid var(--warn);background:var(--warn-soft);padding:12px 14px;border-radius:0 8px 8px 0;margin:16px 0}
+.note.ok{border-color:var(--good);background:var(--good-soft)}
+.note.info{border-color:var(--accent);background:var(--accent-soft)}
+/* options */
+.opt{cursor:default}
+.opt h3{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.opt .price{font:700 1.2rem var(--display);font-variant-numeric:tabular-nums}
+.opt ul{margin:8px 0 0;padding-left:18px}
+.meter{display:flex;gap:3px;align-items:center;font-size:.85rem;color:var(--muted)}
+.meter b{display:inline-block;width:14px;height:6px;border-radius:3px;background:var(--line)}
+.meter b.on{background:var(--accent)}
+/* calculator */
+.calc label{display:block;font-weight:600;margin:0 0 4px;font-size:.9rem}
+.calc select,.calc input[type=number]{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px}
+.calc .row{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));margin-bottom:14px}
+.tot td{font-weight:600}
+.tot tr.sum td{background:var(--accent-soft);font-size:1.05rem}
+/* checklist */
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chk label{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.chk input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
+.chk input:checked+span{color:var(--muted);text-decoration:line-through}
+.src li{margin:4px 0}
+footer{color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding:18px 0 40px}
+@media (max-width:520px){.route li{grid-template-columns:70px 1fr;gap:10px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{header.top nav,.noprint{display:none}.panel{display:block!important;break-inside:avoid;margin-bottom:24px}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>Rio, Montreal, Nova York e Miami</h1>
+    <p class="sub">Passagens, escalas, deslocamento entre aeroporto e Manhattan e custos da viagem de 20/12/2026 a 16/01/2027, para 2 adultos.</p>
+    <div class="meta">
+      <span class="chip">Preços conferidos em <span data-k="data">16/11/2026</span></span>
+      <span class="chip">2 adultos</span>
+      <span class="chip">2 malas de 23 kg + 2 de mão</span>
+    </div>
+    <nav class="tabs" aria-label="Seções">
+      <a href="#resumo" data-tab="resumo">Resumo</a>
+      <a href="#voos" data-tab="voos">Voos</a>
+      <a href="#deslocamento" data-tab="deslocamento">Newark → Manhattan</a>
+      <a href="#custos" data-tab="custos">Custos</a>
+      <a href="#links" data-tab="links">Links para comprar</a>
+      <a href="#checklist" data-tab="checklist">Checklist</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- RESUMO -->
+<section class="panel" id="p-resumo" aria-labelledby="h-resumo">
+  <h2 id="h-resumo">Resumo da viagem</h2>
+  <p class="lead">A melhor combinação encontrada tem só uma escala, de 2h25 em Toronto, no primeiro voo. Os outros três trechos são diretos.</p>
+
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card">
+      <div class="label">Passagens para 2, com bagagem de mão</div>
+      <div class="big" data-k="miami">R$ 23.760</div>
+      <p class="sub">Retorno por Miami. <span data-k="variacao">Subiu R$ 98 desde a manhã de 16/11.</span></p>
+    </div>
+    <div class="card">
+      <div class="label">Com 2 malas despachadas (estimativa)</div>
+      <div class="big" data-k="comBagagem">R$ 25,5 a 26,3 mil</div>
+      <p class="sub">Soma <span data-k="bagFaixa">R$ 1.700 a 2.500</span> de taxas de bagagem das companhias.</p>
+    </div>
+    <div class="card">
+      <div class="label">Maior espera em escala</div>
+      <div class="big">2h25</div>
+      <p class="sub">Toronto, entre Air Transat e Porter, no voo do Rio para Montreal.</p>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3 style="margin-bottom:14px">Roteiro</h3>
+      <ol class="route">
+        <li><div class="when">dom 20/12<br>09:30</div><div class="what"><b>Rio → Montreal</b><small>Air Transat + Porter, escala em Toronto (2h25), chega 22:17</small></div></li>
+        <li><div class="when">sáb 02/01<br>07:00</div><div class="what"><b>Montreal → Newark (Nova York)</b><small>United, direto, chega 09:03</small></div></li>
+        <li><div class="when">qui 07/01<br>16:27</div><div class="what"><b>Newark → Miami</b><small>United, direto, chega 19:49</small></div></li>
+        <li><div class="when">sáb 16/01<br>19:55</div><div class="what"><b>Miami → Rio</b><small>American, direto, 8h35, chega 06:30 de 17/01</small></div></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Decisões principais</h3>
+      <ul>
+        <li><b>Miami em vez de Fort Lauderdale:</b> Fort Lauderdale custa só R$ 165 a menos e exige 12h30 de viagem com escala em Campinas.</li>
+        <li><b>Voos baratos descartados:</b> os de R$ 16,5 a 18 mil têm esperas de 5h18 a 7h40 e não incluem bagagem.</li>
+        <li><b>Em Nova York:</b> com 4 malas grandes, carro porta a porta costuma compensar a diferença de preço.</li>
+        <li><b>Documentos:</b> eTA do Canadá e visto dos EUA para os dois viajantes.</li>
+      </ul>
+      <div class="note"><b>Compra:</b> é alta temporada e o preço já subiu hoje. Minha avaliação é comprar logo, mas não há garantia de que continue subindo.</div>
+      <p class="sub">Valores mudam a cada consulta. Este guia é uma foto de 16/11/2026.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VOOS -->
+<section class="panel" id="p-voos" aria-labelledby="h-voos">
+  <h2 id="h-voos">Voos escolhidos</h2>
+  <p class="lead">O Google Voos mostra o preço acumulado da viagem completa, não o preço de cada trecho. Por isso cada voo traz horário e escala, e o valor fica no total.</p>
+
+  <div class="grid g2">
+    <article class="card leg">
+      <header><div><div class="label">Trecho 1 · dom 20/12/2026</div><h3>Rio (GIG) → Montreal (YUL)</h3></div><span class="pill warn">1 escala</span></header>
+      <div class="times"><span class="t">09:30</span><span class="bar"><i style="left:40%" title="Toronto 2h25"></i></span><span class="t">22:17</span></div>
+      <dl class="kv"><dt>Companhias</dt><dd>Air Transat (GIG–YYZ) + Porter (YYZ–YUL)</dd><dt>Escala</dt><dd>Toronto, 2h25</dd><dt>Duração</dt><dd>14h47</dd></dl>
+      <p class="sub">Não encontrei voo direto nessa data. Confira se a bagagem é transferida automaticamente em Toronto e se há proteção caso o primeiro voo atrase.</p>
+    </article>
+    <article class="card leg">
+      <header><div><div class="label">Trecho 2 · sáb 02/01/2027</div><h3>Montreal (YUL) → Newark (EWR)</h3></div><span class="pill good">Direto</span></header>
+      <div class="times"><span class="t">07:00</span><span class="bar"></span><span class="t">09:03</span></div>
+      <dl class="kv"><dt>Companhia</dt><dd>United</dd><dt>Duração</dt><dd>2h03</dd></dl>
+      <p class="sub">Opções mais baratas foram descartadas: Air Canada às 22:15 com 6h51 em Ottawa, e às 20:10 com 9h24 em Toronto Island.</p>
+    </article>
+    <article class="card leg">
+      <header><div><div class="label">Trecho 3 · qui 07/01/2027</div><h3>Newark (EWR) → Miami (MIA)</h3></div><span class="pill good">Direto</span></header>
+      <div class="times"><span class="t">16:27</span><span class="bar"></span><span class="t">19:49</span></div>
+      <dl class="kv"><dt>Companhia</dt><dd>United</dd><dt>Duração</dt><dd>3h22</dd></dl>
+      <p class="sub">Saia do hotel em Manhattan entre 12:30 e 13:00 para chegar ao aeroporto com cerca de 2 horas de folga.</p>
+    </article>
+    <article class="card leg">
+      <header><div><div class="label">Trecho 4 · sáb 16/01/2027</div><h3>Miami (MIA) → Rio (GIG)</h3></div><span class="pill good">Direto</span></header>
+      <div class="times"><span class="t">19:55</span><span class="bar"></span><span class="t">06:30 <small style="font:500 .8rem var(--body)">+1</small></span></div>
+      <dl class="kv"><dt>Companhia</dt><dd>American</dd><dt>Duração</dt><dd>8h35</dd></dl>
+      <p class="sub">A primeira mala despachada costuma sair sem custo nesse trecho, exceto na tarifa Basic Economy (US$ 70).</p>
+    </article>
+  </div>
+
+  <h3 style="margin:28px 0 10px">Miami ou Fort Lauderdale na volta</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Opção</th><th>Total para 2</th><th>Duração</th><th>Escala</th><th>Avaliação</th></tr></thead>
+    <tbody>
+      <tr><td><b>Miami (American)</b></td><td class="num" data-k="miami">R$ 23.760</td><td class="num">8h35</td><td>Nenhuma</td><td><span class="pill good">Escolhida</span></td></tr>
+      <tr><td>Fort Lauderdale (Azul)</td><td class="num" data-k="fll">R$ 23.595</td><td class="num">12h30</td><td>Campinas, 2h40</td><td><span class="pill warn">R$ 165 mais barata, 4h mais longa</span></td></tr>
+      <tr><td>Fort Lauderdale (United)</td><td class="num">R$ 22.765</td><td class="num">25h05</td><td>Houston, 11h42</td><td><span class="pill bad">Espera longa demais</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin:28px 0 10px">Resultados baratos descartados</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Origem</th><th>Valor</th><th>Problema</th></tr></thead>
+    <tbody>
+      <tr><td>Kayak, combinações mais baratas</td><td class="num">R$ 16,5 a 18 mil</td><td>Esperas de 7h40 em Lima, 5h18 em Toronto Island ou 6h25 em Dallas, e sem bagagem</td></tr>
+      <tr><td>Kayak, Miami–Rio via Lima</td><td class="num">R$ 23.366</td><td>12h20 de viagem; não compensa frente ao voo direto de 8h35</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note info"><b>Bagagem despachada:</b> o filtro do Google Voos só cobre a mala de mão. Taxas consultadas nos sites das companhias em 2026: Air Transat cerca de US$ 95 a 100 pela primeira mala; United US$ 45 pré-pago; Air Canada C$ 45; American grátis rumo ao Brasil, exceto Basic. Porter e Azul não foram confirmadas.</div>
+</section>
+
+<!-- DESLOCAMENTO -->
+<section class="panel" id="p-deslocamento" aria-labelledby="h-desl">
+  <h2 id="h-desl">Do aeroporto de Newark a Manhattan</h2>
+  <p class="lead">Valores em dólares para 2 pessoas, pesquisados em guias de 2026. Confirme as tarifas nos sites da NJ Transit e da Coach USA antes de comprar.</p>
+
+  <div class="grid g2">
+    <article class="card opt">
+      <h3>Trem NJ Transit + AirTrain <span class="price">US$ 34,50</span></h3>
+      <div class="meter" aria-label="Conforto com mala: baixo"><span>Conforto com mala</span><b class="on"></b><b></b><b></b><b></b></div>
+      <ul><li>US$ 17,25 por pessoa até a Penn Station; o bilhete já inclui o AirTrain (cerca de US$ 8,75).</li><li>45 a 60 minutos porta a porta.</li><li>Tem conexões, escadas e multidão com 4 malas grandes.</li><li>Pode haver desconto sênior; confirme com a NJ Transit.</li></ul>
+    </article>
+    <article class="card opt">
+      <h3>Ônibus Newark Airport Express <span class="price">US$ 37 a 47</span></h3>
+      <div class="meter" aria-label="Conforto com mala: médio"><span>Conforto com mala</span><b class="on"></b><b class="on"></b><b></b><b></b></div>
+      <ul><li>US$ 18,70 a 23,50 por pessoa; as fontes divergem. Idosos (62+) têm desconto.</li><li>Cerca de 50 minutos.</li><li>Para só em Port Authority, Bryant Park e Grand Central.</li></ul>
+    </article>
+    <article class="card opt">
+      <h3>Táxi oficial <span class="price">US$ 80 a 95</span></h3>
+      <div class="meter" aria-label="Conforto com mala: alto"><span>Conforto com mala</span><b class="on"></b><b class="on"></b><b class="on"></b><b></b></div>
+      <ul><li>Tarifa por zona, com taxas e pedágio incluídos nessa estimativa; desconto de 10% para idosos.</li><li>Use só a fila oficial do desembarque.</li></ul>
+    </article>
+    <article class="card opt">
+      <h3>Uber ou Lyft <span class="price">US$ 70 a 110</span></h3>
+      <div class="meter" aria-label="Conforto com mala: alto"><span>Conforto com mala</span><b class="on"></b><b class="on"></b><b class="on"></b><b></b></div>
+      <ul><li>Pode chegar a US$ 130 a 160 com chuva, neve ou pico de demanda.</li><li>Peça carro grande (XL ou SUV) para as 4 malas.</li></ul>
+    </article>
+    <article class="card opt" style="grid-column:1/-1">
+      <h3>Carro com motorista, reservado antes <span class="price">a partir de US$ 90</span></h3>
+      <div class="meter" aria-label="Conforto com mala: muito alto"><span>Conforto com mala</span><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b></div>
+      <ul><li>Valor fechado e motorista que ajuda com as malas. Boa escolha para a chegada cansada e para a volta de 07/01.</li></ul>
+    </article>
+  </div>
+
+  <div class="note ok"><b>Minha indicação:</b> carro grande, por causa das 4 malas. Se o hotel ficar perto da Penn Station ou a prioridade for economizar, o trem funciona.</div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>Chegada: sábado 02/01, cerca de 09:03</h3>
+      <ul>
+        <li>O aeroporto de Montreal tem pré-liberação dos EUA, então você normalmente chega a Newark como voo doméstico. Confirme no cartão de embarque.</li>
+        <li>O check-in do hotel costuma ser às 15h. Peça para guardar as malas na recepção.</li>
+        <li>Chegada de manhã de sábado tem menos trânsito de dia útil.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Volta: quinta 07/01, voo às 16:27</h3>
+      <ul>
+        <li>Saia do hotel entre 12:30 e 13:00. É dia útil e o túnel pode ter trânsito.</li>
+        <li>Reserve o carro com antecedência ou combine com o hotel.</li>
+        <li>Se pegar o trem, em dias úteis das 5h às 15h um ônibus pode substituir o AirTrain por obras (cerca de 15 minutos a mais).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 10px">Passo a passo do trem</h3>
+  <ol>
+    <li>No desembarque, siga as placas de AirTrain ou Train to NYC.</li>
+    <li>Pegue o AirTrain até a estação Newark Airport Rail Station.</li>
+    <li>Compre um único bilhete NJ Transit para New York Penn Station; ele já inclui o AirTrain.</li>
+    <li>Embarque no trem (cerca de 30 minutos de viagem).</li>
+    <li>Da Penn Station, vá ao hotel a pé, de metrô (cerca de US$ 3 por pessoa) ou de táxi.</li>
+  </ol>
+  <p class="sub">Dicas: tenha o endereço do hotel salvo no celular, gorjeta de 15 a 20% é esperada em táxi e carro com motorista, e desconfie de motoristas que abordam dentro do terminal.</p>
+</section>
+
+<!-- CUSTOS -->
+<section class="panel" id="p-custos" aria-labelledby="h-custos">
+  <h2 id="h-custos">Custos da viagem</h2>
+  <p class="lead">Escolha o transporte em Nova York e ajuste o câmbio. O total soma passagens, bagagem despachada e os dois deslocamentos entre Newark e Manhattan.</p>
+
+  <div class="card calc">
+    <div class="row">
+      <div><label for="sel-in">Chegada em Newark (02/01)</label><select id="sel-in"></select></div>
+      <div><label for="sel-out">Ida ao aeroporto (07/01)</label><select id="sel-out"></select></div>
+      <div><label for="fx">Câmbio (R$ por US$)</label><input id="fx" type="number" step="0.01" min="1" value="5.50"></div>
+    </div>
+    <p class="sub" style="margin-top:0">O câmbio de 5,50 é um valor de exemplo. Troque pelo câmbio do dia.</p>
+  </div>
+
+  <h3 style="margin:22px 0 10px">Composição do total</h3>
+  <div class="tw tot"><table>
+    <thead><tr><th>Item</th><th>Mínimo</th><th>Máximo</th><th>Base</th></tr></thead>
+    <tbody>
+      <tr><td>Passagens, 4 trechos, 2 adultos (bagagem de mão)</td><td class="num" id="c-f-lo"></td><td class="num" id="c-f-hi"></td><td>Google Voos, 16/11/2026</td></tr>
+      <tr><td>2 malas despachadas de 23 kg</td><td class="num" id="c-b-lo"></td><td class="num" id="c-b-hi"></td><td>Estimativa com taxas das companhias</td></tr>
+      <tr><td>Newark → Manhattan (chegada)</td><td class="num" id="c-i-lo"></td><td class="num" id="c-i-hi"></td><td id="c-i-n"></td></tr>
+      <tr><td>Manhattan → Newark (volta)</td><td class="num" id="c-o-lo"></td><td class="num" id="c-o-hi"></td><td id="c-o-n"></td></tr>
+      <tr class="sum"><td>Total estimado</td><td class="num" id="c-t-lo"></td><td class="num" id="c-t-hi"></td><td>Sem hotel, comida e passeios</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Os preços das passagens mudam a cada consulta e podem subir até a compra. A taxa de bagagem das companhias varia por tarifa. Use o total como referência de orçamento, não como valor final.</div>
+</section>
+
+<!-- LINKS -->
+<section class="panel" id="p-links" aria-labelledby="h-links">
+  <h2 id="h-links">Onde comprar e consultar</h2>
+  <p class="lead">Todos os links abrem em outra aba. Os de busca de passagens levam à pesquisa já montada ou ao site da companhia; a data e o preço você confere na hora da compra.</p>
+
+  <h3 style="margin:8px 0 10px">Passagens</h3>
+  <div class="grid g2">
+    <div class="card"><div class="label">Comparar preços</div>
+      <ul>
+        <li><a href="https://www.google.com/travel/flights?hl=pt-BR&curr=BRL">Google Voos</a>: use "Várias cidades" com os 4 trechos.</li>
+        <li><a href="https://www.kayak.com.br/flights/GIG-YUL/2026-12-20/YUL-NYC/2027-01-02/NYC-MIA/2027-01-07/MIA-GIG/2027-01-16/2adults">Kayak</a>: busca multidestino pronta com as datas e 2 adultos.</li>
+      </ul></div>
+    <div class="card"><div class="label">Comprar direto na companhia</div>
+      <ul>
+        <li><a href="https://www.airtransat.com">Air Transat</a>: Rio → Toronto (trecho 1).</li>
+        <li><a href="https://www.flyporter.com">Porter</a>: Toronto → Montreal (trecho 1).</li>
+        <li><a href="https://www.united.com">United</a>: Montreal → Newark e Newark → Miami (trechos 2 e 3).</li>
+        <li><a href="https://www.aa.com">American Airlines</a>: Miami → Rio (trecho 4).</li>
+        <li><a href="https://www.aircanada.com">Air Canada</a> e <a href="https://www.voeazul.com.br">Azul</a>: alternativas pesquisadas.</li>
+      </ul></div>
+  </div>
+
+  <h3 style="margin:24px 0 10px">Documentos</h3>
+  <div class="grid g2">
+    <div class="card">
+      <ul>
+        <li><a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/eta.html">eTA do Canadá</a>: solicitação online, para cada viajante.</li>
+        <li><a href="https://travel.state.gov/content/travel/en/us-visas.html">Visto dos EUA</a>: informações oficiais do Departamento de Estado.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="sub" style="margin:0">Use apenas os sites oficiais acima. Existem sites que cobram a mais para emitir a eTA.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 10px">Newark → Manhattan</h3>
+  <div class="grid g2">
+    <div class="card">
+      <ul>
+        <li><a href="https://www.njtransit.com">NJ Transit</a>: bilhete de trem até a Penn Station.</li>
+        <li><a href="https://www.coachusa.com">Coach USA, Newark Airport Express</a>: ônibus para Midtown.</li>
+        <li><a href="https://www.newarkairport.com">Aeroporto de Newark</a>: informações oficiais, terminais e AirTrain.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <ul>
+        <li><a href="https://www.uber.com">Uber</a> e <a href="https://www.lyft.com">Lyft</a>: peça carro grande (XL ou SUV) para as 4 malas.</li>
+        <li>Carro com motorista: reserve antes pelo hotel ou por uma empresa de traslado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 10px">Bagagem despachada</h3>
+  <div class="card">
+    <p style="margin-top:0">Confira o valor da mala de 23 kg na página de bagagem de cada companhia antes de comprar. Para o orçamento, a estimativa é de R$ 1.700 a 2.500 para as duas malas.</p>
+    <ul>
+      <li><a href="https://www.airtransat.com">Air Transat</a>, <a href="https://www.flyporter.com">Porter</a>, <a href="https://www.united.com">United</a> e <a href="https://www.aa.com">American</a>: procure "Bagagem" ou "Baggage" no rodapé do site.</li>
+    </ul>
+  </div>
+  <div class="note info">Não incluí links de hotel, seguro-viagem e passeios, porque ainda não sei o que você pretende reservar. Me diga e eu acrescento.</div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="panel" id="p-checklist" aria-labelledby="h-chk">
+  <h2 id="h-chk">Checklist antes de comprar e de viajar</h2>
+  <p class="lead">Marque o que já resolveu. Neste navegador a marcação fica salva.</p>
+  <ul class="chk" id="chk"></ul>
+
+  <h3 style="margin:28px 0 8px">Fontes</h3>
+  <ul class="src">
+    <li><a href="https://www.google.com/travel/flights?hl=pt-BR&curr=BRL">Google Voos, multidestino</a></li>
+    <li><a href="https://www.kayak.com.br/flights/GIG-YUL/2026-12-20/YUL-NYC/2027-01-02/NYC-MIA/2027-01-07/MIA-GIG/2027-01-16/2adults">Kayak, multidestino</a></li>
+    <li><a href="https://getridewise.com/blog/cheapest-way-ewr-to-manhattan-uber-taxi-train">RideWise, EWR para Manhattan (jun/2026)</a></li>
+    <li><a href="https://www.blade.com/how-to-get-from-newark-airport-to-manhattan">Blade, Newark para Manhattan</a></li>
+    <li><a href="https://jetblacktransportation.com/?p=57180">JetBlack, custos EWR para NYC (mar/2026)</a></li>
+    <li><a href="https://jetblacktransportation.com/?p=54890">JetBlack, Newark Airport Express</a></li>
+  </ul>
+</section>
+
+</main>
+<footer><div class="wrap">Guia preparado em 16/11/2026. Os valores de transporte vieram de guias de 2026, não dos sites oficiais; confirme antes de comprar.</div></footer>
+
+<script>
+(function(){
+  var TABS=['resumo','voos','deslocamento','custos','links','checklist'];
+  function show(){
+    var h=(location.hash||'').replace('#','');
+    if(TABS.indexOf(h)<0)h='resumo';
+    TABS.forEach(function(t){
+      document.getElementById('p-'+t).classList.toggle('on',t===h);
+      var a=document.querySelector('[data-tab="'+t+'"]');
+      if(t===h)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('hashchange',show);show();
+
+  // Custos (valores em US$ para 2 pessoas)
+  var OPTS=[
+    {k:'uber',n:'Uber ou Lyft',lo:70,hi:110},
+    {k:'car',n:'Carro com motorista (reservado)',lo:90,hi:130},
+    {k:'taxi',n:'Táxi oficial',lo:80,hi:95},
+    {k:'train',n:'Trem NJ Transit + AirTrain',lo:34.5,hi:34.5},
+    {k:'bus',n:'Ônibus Newark Airport Express',lo:37.4,hi:47}
+  ];
+  var FL=23760, BAG_LO=1700, BAG_HI=2500, D=null;
+  var selIn=document.getElementById('sel-in'),selOut=document.getElementById('sel-out'),fx=document.getElementById('fx');
+  OPTS.forEach(function(o){[selIn,selOut].forEach(function(s){var e=document.createElement('option');e.value=o.k;e.textContent=o.n;s.appendChild(e);});});
+  function get(k){return OPTS.filter(function(o){return o.k===k})[0];}
+  function brl(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR');}
+  function set(id,v){document.getElementById(id).textContent=v;}
+  function calc(){
+    var r=parseFloat(fx.value);if(!(r>0))r=5.5;
+    var i=get(selIn.value),o=get(selOut.value);
+    set('c-f-lo',brl(FL));set('c-f-hi',brl(FL));
+    set('c-b-lo',brl(BAG_LO));set('c-b-hi',brl(BAG_HI));
+    set('c-i-lo',brl(i.lo*r));set('c-i-hi',brl(i.hi*r));set('c-i-n',i.n+', US$ '+i.lo+' a '+i.hi);
+    set('c-o-lo',brl(o.lo*r));set('c-o-hi',brl(o.hi*r));set('c-o-n',o.n+', US$ '+o.lo+' a '+o.hi);
+    set('c-t-lo',brl(FL+BAG_LO+(i.lo+o.lo)*r));set('c-t-hi',brl(FL+BAG_HI+(i.hi+o.hi)*r));
+  }
+  [selIn,selOut,fx].forEach(function(e){e.addEventListener('input',calc);});
+  calc();
+
+  // Dados diários: lê dados.json (atualizado automaticamente) e preenche os valores da página
+  function brlf(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR');}
+  function fill(d){
+    D=d;FL=d.miami_total;BAG_LO=d.bagagem_min;BAG_HI=d.bagagem_max;
+    var q=function(k){return document.querySelectorAll('[data-k="'+k+'"]');};
+    q('miami').forEach(function(e){e.textContent=brlf(d.miami_total);});
+    q('fll').forEach(function(e){e.textContent=brlf(d.fll_total);});
+    q('bagFaixa').forEach(function(e){e.textContent=brlf(d.bagagem_min)+' a '+Math.round(d.bagagem_max).toLocaleString('pt-BR');});
+    q('comBagagem').forEach(function(e){e.textContent='R$ '+((d.miami_total+d.bagagem_min)/1000).toFixed(1).replace('.',',')+' a '+((d.miami_total+d.bagagem_max)/1000).toFixed(1).replace('.',',')+' mil';});
+    q('data').forEach(function(e){var t=new Date(d.atualizado_em);e.textContent=isNaN(t)?d.atualizado_em:t.toLocaleDateString('pt-BR');});
+    q('variacao').forEach(function(e){
+      if(d.miami_anterior==null)return;var dif=d.miami_total-d.miami_anterior;
+      e.textContent=dif===0?'Sem mudança desde a última consulta.':(dif>0?'Subiu ':'Caiu ')+brlf(Math.abs(dif))+' desde a consulta anterior.';
+    });
+    calc();
+  }
+  try{fetch('dados.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){if(d)fill(d);}).catch(function(){});}catch(e){}
+
+  // Checklist
+  var ITEMS=[
+    'Confirmar com cada companhia a tarifa e a bagagem despachada (uma mala de 23 kg e uma de mão de 10 kg por adulto)',
+    'Confirmar se a bagagem do Rio a Montreal é transferida automaticamente em Toronto (Air Transat + Porter)',
+    'Verificar a validade dos passaportes dos dois viajantes',
+    'Emitir a eTA do Canadá para os dois',
+    'Confirmar que o visto dos EUA dos dois está válido durante toda a viagem',
+    'Definir o hotel em Manhattan e pedir guarda de malas na chegada de 02/01',
+    'Reservar o carro do aeroporto para 02/01 e para 07/01 (saída entre 12:30 e 13:00)',
+    'Conferir as tarifas de trem e ônibus nos sites da NJ Transit e da Coach USA, se for usá-los',
+    'Contratar seguro-viagem com cobertura para os dois',
+    'Comprar as passagens (preço sobe nos dias de maior procura)'
+  ];
+  var store={};try{store=JSON.parse(localStorage.getItem('chk-viagem')||'{}')}catch(e){}
+  var ul=document.getElementById('chk');
+  ITEMS.forEach(function(t,i){
+    var li=document.createElement('li'),l=document.createElement('label'),c=document.createElement('input'),s=document.createElement('span');
+    c.type='checkbox';c.id='chk-'+i;c.checked=!!store[i];s.textContent=t;
+    c.addEventListener('change',function(){store[i]=c.checked;try{localStorage.setItem('chk-viagem',JSON.stringify(store))}catch(e){}});
+    l.appendChild(c);l.appendChild(s);li.appendChild(l);ul.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>
